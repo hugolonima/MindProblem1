@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/Relative"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.example.hdelanietamarin.mindproblem.LoginActivity">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="350dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:text="@string/user_name_question"
+        android:textColor="@android:color/background_dark"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/user_text"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_below="@+id/textView2"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/user_text"
+        android:layout_alignStart="@+id/user_text"
+        android:layout_below="@+id/user_text"
+        android:layout_marginTop="16dp"
+        android:text="@string/date_"
+        android:textColor="@android:color/background_dark"
+        android:textSize="24sp"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/btn_enter"
+        android:layout_width="350dp"
+        android:layout_height="80dp"
+        android:layout_alignLeft="@+id/year_text"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/year_text"
+        android:layout_marginBottom="42dp"
+        android:background="@color/colorAccent"
+        android:text="@string/enter" />
+
+    <EditText
+        android:id="@+id/year_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/textView3"
+        android:layout_alignRight="@+id/textView3"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignStart="@+id/textView3"
+        android:layout_below="@+id/month_text"
+        android:ems="10"
+        android:hint="@string/year"
+        android:visibility="invisible"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/month_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/textView3"
+        android:layout_alignLeft="@+id/year_text"
+        android:layout_alignRight="@+id/textView3"
+        android:layout_alignStart="@+id/year_text"
+        android:layout_below="@+id/day_text"
+        android:ems="10"
+        android:hint="@string/month"
+        android:visibility="invisible"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/day_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/textView3"
+        android:layout_alignLeft="@+id/month_text"
+        android:layout_alignRight="@+id/textView3"
+        android:layout_alignStart="@+id/month_text"
+        android:layout_below="@+id/textView3"
+        android:ems="10"
+        android:hint="@string/day"
+        android:visibility="invisible"
+        android:inputType="date" />
+
+</android.widget.RelativeLayout>

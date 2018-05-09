@@ -1,0 +1,86 @@
+<resources>
+    <string name="app_name" translatable="false">Mind Problem</string>
+    <string name="title_activity_login" translatable="false">Log in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Correo</string>
+    <string name="prompt_password">Contraseña (opcional)</string>
+    <string name="action_sign_in">Entra o regístrate</string>
+    <string name="action_sign_in_short">Entra</string>
+    <string name="error_invalid_email">Correo invalido</string>
+    <string name="error_invalid_password">Contraseña muy corta</string>
+    <string name="error_incorrect_password">Contraseña incorrecta</string>
+    <string name="error_field_required">Este campo es obligatorio</string>
+    <string name="Colores">Colores</string>
+    <string name="Record" translatable="false">Record:</string>
+    <string name="start_question">¿Desde dónde quieres empezar?</string>
+    <string name="fallado">Has fallado... Mala suerte</string>
+    <string name="action_question">¿Qué quieres hacer?</string>
+    <string name="felicidades">¡Felicidades!</string>
+    <string name="acierto">¡Has acertado, ahora a por el siguiente nivel!</string>
+    <string name="couldnt_write">No se puede escribir</string>
+    <string name="numeros">Números</string>
+    <string name="insert_valid">Por favor, inserte un valor válido</string>
+    <string name="brush_size">Tamaño del pincel:</string>
+    <string name="eraser_size">Tamaño del borrador:</string>
+    <string name="start_again">Empezar de nuevo</string>
+    <string name="draw_question">¿Quieres empezar un nuevo dibujo? Perderás el dibujo actual.</string>
+    <string name="save_draw">Guardar el dibujo</string>
+    <string name="save_draw_question">¿Quieres guardar el dibujo en la galería?</string>
+    <string name="draw">Dibujo</string>
+    <string name="save_ok">¡Se ha guardado tu dibujo!</string>
+    <string name="save_wrong">¡Ups, algo ha ido mal!</string>
+    <string name="dibujos">Dibujos</string>
+    <string name="valid_number">Por favor, introduzca un número válido</string>
+    <string name="baby_number">¿Cuántos bebés hay?</string>
+    <string name="ball_number">¿Cuántos balones hay?</string>
+    <string name="house_number">¿Cuántas casas hay?</string>
+    <string name="plane_number">¿Cuántos aviones hay?</string>
+    <string name="color_record">Mi record en colores es:</string>
+    <string name="number_record">Mi record en números es:</string>
+    <string name="draw_record">Mi record en dibujos es:</string>
+    <string name="couldnt_read">No se puede leer</string>
+    <string name="close_question">¿Seguro que deseas cerrar la sesión?</string>
+    <string name="delete">Se eliminarán todo los datos</string>
+    <string name="share_question">¿Quieres compartir tu progreso?</string>
+    <string name="share_records">"Puedes mandar tus récords a quien quieras "</string>
+    <string name="app_publi">Si quieres jugar y comparar nuestros progresos bájate Mind Problem. ¡Es gratis!</string>
+    <string name="no_records_yet">Aún no has jugado a ningún juego...</string>
+    <string name="play">Juega a algún juego y luego vuelve a intentar compartir tus resultados</string>
+    <string name="share_with">Compartir con:</string>
+    <string name="something_went_wrong">Ups... Algo falló</string>
+    <string name="no_wa">Parece que no tienes WhatsApp instalado.</string>
+    <string name="install_wa">Instala la aplicación para poder compartir tus récords</string>
+    <string name="read">Asegúrate de leer las instrucciones</string>
+    <string name="read_question">¿Has leído las instrucciones?</string>
+    <string name="fill_all">Rellene todos los campos</string>
+    <string name="introduce_fecha">Introduce tu fecha de nacimiento</string>
+    <string name="exist">Usuario ya existente</string>
+    <string name="entry_question">¿Has entrado anteriormente?</string>
+    <string name="entry_error">¡Error al entrar!</string>
+    <string name="choose_another">Elige un usuario que no esté ya ocupado</string>
+    <string name="valid_user">Introduce un usuario válido</string>
+    <string name="date">Fecha</string>
+    <string name="begin">Empezar</string>
+    <string name="level">Nivel:</string>
+    <string name="memoriza">Trata de memorizar los números antes de que desaparezcan</string>
+    <string name="pulsa">Pulsa para empezar</string>
+    <string name="check">Comprobar</string>
+    <string name="ok" translatable="false">Ok</string>
+    <string name="dibuja">Dibuja</string>
+    <string name="continuar" translatable="false">Continuar</string>
+    <string name="user_name_question">¿Cuál quieres que sea tu nombre de usuario?</string>
+    <string name="date_">Fecha de nacimiento</string>
+    <string name="enter">Entrar</string>
+    <string name="year">Año</string>
+    <string name="month">Mes(número)</string>
+    <string name="day">Día</string>
+    <string name="yes" translatable="false">¡Sí!</string>
+    <string name="no" translatable="false">¡No!</string>
+    <string name="try_again">Volverlo a intentar</string>
+    <string name="back">Volver a la pantalla inicial</string>
+    <string name="desde_0">Desde 0</string>
+    <string name="record_anterior">Desde el récord anterior</string>
+
+
+</resources>
