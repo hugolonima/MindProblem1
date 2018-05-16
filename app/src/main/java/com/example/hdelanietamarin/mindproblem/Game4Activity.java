@@ -43,7 +43,11 @@ public class Game4Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game4);
-
+        btn_check =(Button) findViewById(R.id.btn_check);
+        text_view =(TextView) findViewById(R.id.text_view);
+        text_level = (TextView) findViewById(R.id.text_level);
+        editText = (EditText) findViewById(R.id.editText);
+        gridview = (GridView) findViewById(R.id.gridview);
         code = getIntent().getStringExtra("code");
 
         database = FirebaseDatabase.getInstance();
@@ -52,23 +56,27 @@ public class Game4Activity extends AppCompatActivity {
         }
         final DatabaseReference myRef = database.getReference(code);
 
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            level = savedInstanceState.getInt("Level");
+            Log.i("Hugo", "Saved instance");
+
+        }
+        Log.i("Hugo", "Level: " + level);
 
 
-        btn_check =(Button) findViewById(R.id.btn_check);
-        text_view =(TextView) findViewById(R.id.text_view);
-        text_level = (TextView) findViewById(R.id.text_level);
-        editText = (EditText) findViewById(R.id.editText);
-        gridview = (GridView) findViewById(R.id.gridview);
+
+
 
         myRef.child("Dibujos");
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild(getString(R.string.dibujos))){
-                    myRef.child(getString(R.string.dibujos)).setValue("1");
+                if(!dataSnapshot.hasChild("Dibujos")){
+                    myRef.child("Dibujos").setValue("1");
                     text_level.setText(getString(R.string.Record)+ 1);
                 }else{
-                    text_level.setText(getString(R.string.Record)+ dataSnapshot.child(getString(R.string.dibujos)).getValue().toString());
+                    text_level.setText(getString(R.string.Record)+ dataSnapshot.child("Dibujos").getValue().toString());
                 }
                 text_level.setVisibility(View.VISIBLE);
 
@@ -149,7 +157,7 @@ public class Game4Activity extends AppCompatActivity {
                 level = level +1;
 
 
-                final DatabaseReference myRef = database.getReference(code).child(getString(R.string.dibujos));
+                final DatabaseReference myRef = database.getReference(code).child("Dibujos");
                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -257,6 +265,15 @@ public class Game4Activity extends AppCompatActivity {
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putInt("Level", level);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
 }

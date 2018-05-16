@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +30,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Locale;
 
 public class InitActivity extends AppCompatActivity {
 
@@ -35,8 +38,11 @@ public class InitActivity extends AppCompatActivity {
 Button btn_game1; Button btn_game2; Button btn_game3; Button btn_game4;
 String code;
     String r_colores="";
+    String record_c ="";
     String r_numeros="";
+    String record_n = "";
     String r_dibujos="";
+    String record_d = "";
 
     FirebaseDatabase database;
     DatabaseReference dref;
@@ -47,6 +53,20 @@ String code;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
 
+        ImageView image = (ImageView) findViewById(R.id.imageView);
+
+        String language = Locale.getDefault().getDisplayLanguage();
+        if(language.contains("ca")){
+            image.setImageDrawable(getDrawable(R.drawable.bubble_init_ca));
+        }else{
+            if(language.contains("Engl")){
+                image.setImageDrawable(getDrawable(R.drawable.bubble_init));
+            }else{
+                image.setImageDrawable(getDrawable(R.drawable.bubble_init));
+            }
+        }
+        Log.i("Hugo", language);
+        //English, català
 
         database = FirebaseDatabase.getInstance();
 
@@ -123,11 +143,14 @@ String code;
     }
 
     private void actualize() {
-        dref.child(getString(R.string.Colores)).addListenerForSingleValueEvent(new ValueEventListener() {
+        dref.child("Colores").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()!=null) {
-                    r_colores = getString(R.string.color_record) + dataSnapshot.getValue().toString() + "\n";
+                    if(!dataSnapshot.getValue().toString().equals("1")) {
+                        record_c = dataSnapshot.getValue().toString();
+                        r_colores = getString(R.string.color_record) + dataSnapshot.getValue().toString() + "\n";
+                    }
                 }
             }
 
@@ -137,11 +160,14 @@ String code;
             }
         });
 
-        dref.child(getString(R.string.numeros)).addListenerForSingleValueEvent(new ValueEventListener() {
+        dref.child("Números").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()!=null) {
-                    r_numeros = getString(R.string.number_record) + dataSnapshot.getValue().toString() + "\n";
+                    if (!dataSnapshot.getValue().toString().equals("1")) {
+                        record_n = dataSnapshot.getValue().toString();
+                        r_numeros = getString(R.string.number_record) + dataSnapshot.getValue().toString() + "\n";
+                    }
                 }
             }
 
@@ -151,11 +177,14 @@ String code;
             }
         });
 
-        dref.child(getString(R.string.dibujos)).addListenerForSingleValueEvent(new ValueEventListener() {
+        dref.child("Dibujos").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()!=null) {
-                    r_dibujos = getString(R.string.draw_record) + dataSnapshot.getValue().toString() + "\n";
+                    if (!dataSnapshot.getValue().toString().equals("1")) {
+                        record_d = dataSnapshot.getValue().toString();
+                        r_dibujos = getString(R.string.draw_record) + dataSnapshot.getValue().toString() + "\n";
+                    }
                 }
             }
 
@@ -240,6 +269,7 @@ String code;
     public boolean onOptionsItemSelected (MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_cerrar:
+                //TODO: BORRAR EL FICHERO
                 final AlertDialog builder2 = new AlertDialog.Builder(this).create();
                 builder2.setTitle(getString(R.string.close_question));
                 builder2.setMessage(getString(R.string.delete));
@@ -291,9 +321,13 @@ String code;
                         public void onClick(View v) {
 
 
-                            String text = r_colores.concat(r_dibujos).concat(r_numeros).
-                                    concat(getString(R.string.app_publi));
-
+                            String text_1 = r_colores.concat(r_dibujos).concat(r_numeros);
+                            String text;
+                            if(!text_1.equals("")) {
+                                 text = text_1.concat(getString(R.string.app_publi));
+                            }else{
+                               text = "";
+                            }
                                 sendRecords(text);
 
 
@@ -310,7 +344,49 @@ String code;
                     });
                     builder1.show();
                     return true;
+            case R.id.action_consultar:
+                final AlertDialog builder_ = new AlertDialog.Builder(this).create();
+                builder_.setTitle("Estos son tus récords actuales");
+                builder_.setMessage("Si aún no has jugado a alguno de ellos te saldrá un 0 como récord");
 
+                builder_.setCancelable(false);
+                LayoutInflater factory_ = LayoutInflater.from(this);
+                final View view_ = factory_.inflate(R.layout.records_dialog, null);
+                builder_.setView(view_);
+
+                TextView record_colores = (TextView) view_.findViewById(R.id.tV_record1);
+                TextView record_numeros = (TextView) view_.findViewById(R.id.tV_record2);
+                TextView record_dibujos = (TextView) view_.findViewById(R.id.tV_record3);
+
+                if(!r_colores.equals("")){
+                    record_colores.setText(record_c);
+                }else{
+                    record_colores.setText("0");
+                }
+                if(!r_numeros.equals("")){
+                    record_numeros.setText(record_n);
+                }else{
+                    record_numeros.setText("0");
+                }
+                if(!r_dibujos.equals("")){
+                    record_dibujos.setText(record_d);
+                }else{
+                    record_dibujos.setText("0");
+                }
+
+
+
+                Button button1 = view_.findViewById(R.id.button3);
+                button1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        builder_.dismiss();
+                    }
+                });
+                builder_.show();
+
+                //TODO: inflar el "records_dialog" y que sus textos sean los nombres de los juegos y los récords
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -338,21 +414,21 @@ String code;
             alertDialog.show();
         }else{
             PackageManager pm = getPackageManager();
-            try {
+            //try {
 
                 Intent waIntent = new Intent(Intent.ACTION_SEND);
                 waIntent.setType("text/plain");
                 //String text = "YOUR TEXT HERE";
 
-                PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+                /*PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
                 //Check if package exists or not. If not then code
                 //in catch block will be called
-                waIntent.setPackage("com.whatsapp");
+                waIntent.setPackage("com.whatsapp");*/
 
                 waIntent.putExtra(Intent.EXTRA_TEXT, text);
                 startActivity(Intent.createChooser(waIntent, getString(R.string.share_with)));
 
-            } catch (PackageManager.NameNotFoundException e) {
+             /*catch (PackageManager.NameNotFoundException e) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
                 alertDialog.setTitle(getString(R.string.something_went_wrong));
                 alertDialog
@@ -373,7 +449,7 @@ String code;
 
                 alertDialog.show();
 
-            }
+            }*/
         }
     }
 

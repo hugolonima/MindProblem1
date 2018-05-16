@@ -7,15 +7,40 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import java.util.Locale;
 
 public class InstrActi1Activity extends AppCompatActivity {
     String code;
-    Button btn_to_game;
+    Button btn_back, btn_to_game;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instr_acti1);
         btn_to_game = (Button) findViewById(R.id.btn_to_game);
+        btn_back = (Button) findViewById(R.id.btn_back);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(InstrActi1Activity.this, InitActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageView image = (ImageView) findViewById(R.id.imageView2);
+        String language = Locale.getDefault().getDisplayLanguage();
+        if(language.contains("ca")){
+            image.setImageDrawable(getDrawable(R.drawable.bubble_color_ca));
+        }else{
+            if(language.contains("Engl")){
+                //TODO: Hacer la imagen en inglés
+                image.setImageDrawable(getDrawable(R.drawable.bubble_color_ca));
+            }else{
+                image.setImageDrawable(getDrawable(R.drawable.bubble_colors));
+            }
+        }
+
         code = getIntent().getStringExtra("code");
         btn_to_game.setOnClickListener(new View.OnClickListener() {
             @Override

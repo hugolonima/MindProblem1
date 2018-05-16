@@ -31,4 +31,18 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="59dp"
         app:srcCompat="@drawable/bubble_dibujos" />
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btn_to_game"
+        android:layout_alignBottom="@+id/btn_to_game"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="33dp"
+        android:layout_marginStart="33dp"
+        android:backgroundTint="@color/colorAccent"
+        android:background="@drawable/roundedbutton"
+        android:textColor="@android:color/background_light"
+        android:text="@string/atras" />
 </android.widget.RelativeLayout>

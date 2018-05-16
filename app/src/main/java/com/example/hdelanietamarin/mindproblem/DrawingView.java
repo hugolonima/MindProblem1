@@ -23,6 +23,7 @@ public class DrawingView extends View{
 
     private float brushSize, lastBrushSize;
     private boolean erase=false;
+    public Bitmap bm;
 
     public DrawingView(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -37,6 +38,12 @@ public class DrawingView extends View{
     private Bitmap canvasBitmap;
 
 
+    public Canvas getCanvas(){
+        return drawCanvas;
+    }
+    public void setBm(Bitmap bm){
+        bm = this.bm;
+    }
     public void setupDrawing() {
         brushSize = getResources().getInteger(R.integer.medium_size);
         lastBrushSize = brushSize;
@@ -84,14 +91,28 @@ public class DrawingView extends View{
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        drawCanvas = new Canvas(canvasBitmap);
+
+            canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            drawCanvas = new Canvas(canvasBitmap);
+
+
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if(bm!=null){
+            canvasBitmap = bm;
+        }
         canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
         canvas.drawPath(drawPath, drawPaint);
+    }
+    public Bitmap getCanvasBitmap(){
+        return canvasBitmap;
+    }
+
+    public void setBitmap(Bitmap bmp){
+
+        drawCanvas.setBitmap(bmp);
     }
 
     @Override

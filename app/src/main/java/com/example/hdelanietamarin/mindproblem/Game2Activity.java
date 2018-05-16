@@ -73,7 +73,7 @@ public class Game2Activity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         code = getIntent().getStringExtra("code");
 
-
+        final DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child(String.valueOf(code));
         edit_answer.setOnFocusChangeListener(new View.OnFocusChangeListener() {//detecta si se pulsa fuera del textview. también hace falta añadir focusable y clickable en el xml
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -83,16 +83,76 @@ public class Game2Activity extends AppCompatActivity {
             }
         });
 
-        final DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child(String.valueOf(code));
-        dref.child(getString(R.string.numeros));//.setValue("2");
+
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            cant = savedInstanceState.getInt("Level");
+
+        } else {
+
+
+
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle(getString(R.string.start_question));
+
+            alertDialog.setCancelable(false);
+            LayoutInflater factory = LayoutInflater.from(this);
+            final View view = factory.inflate(R.layout.level_dialog, null);
+            alertDialog.setView(view);
+
+
+            Button button = view.findViewById(R.id.button2);
+            Button button2 = view.findViewById(R.id.button3);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    cant =1;
+                    alertDialog.dismiss();
+                }
+            });
+
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dref.child("Números").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String record_actual_s = dataSnapshot.getValue().toString();
+                            int record_actual = Integer.parseInt(record_actual_s);
+                            if(record_actual>cant){
+                                cant = record_actual;
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    alertDialog.dismiss();
+                }
+            });
+
+
+            alertDialog.show();
+
+
+
+            // Probably initialize members with default values for a new instance
+        }
+
+
+        dref.child("Números");//.setValue("2");
         dref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild(getString(R.string.numeros))){
-                    dref.child(getString(R.string.numeros)).setValue("1");
+                if(!dataSnapshot.hasChild("Números")){
+                    dref.child("Números").setValue("1");
                     text_level.setText(getString(R.string.Record)+ 1);
                 }else{
-                    text_level.setText(getString(R.string.Record)+ dataSnapshot.child(getString(R.string.numeros)).getValue().toString());
+                    text_level.setText(getString(R.string.Record)+ dataSnapshot.child("Números").getValue().toString());
                 }
                 text_level.setVisibility(View.VISIBLE);
 
@@ -107,50 +167,6 @@ public class Game2Activity extends AppCompatActivity {
 
 
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(getString(R.string.start_question));
-
-        alertDialog.setCancelable(false);
-        LayoutInflater factory = LayoutInflater.from(this);
-        final View view = factory.inflate(R.layout.level_dialog, null);
-        alertDialog.setView(view);
-
-
-        Button button = view.findViewById(R.id.button2);
-        Button button2 = view.findViewById(R.id.button3);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cant =1;
-                alertDialog.dismiss();
-            }
-        });
-
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dref.child(getString(R.string.numeros)).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String record_actual_s = dataSnapshot.getValue().toString();
-                        int record_actual = Integer.parseInt(record_actual_s);
-                        if(record_actual>cant){
-                            cant = record_actual;
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-                alertDialog.dismiss();
-            }
-        });
-
-
-        alertDialog.show();
 
 
         btn_ready.setOnClickListener(new View.OnClickListener() {
@@ -341,5 +357,14 @@ public class Game2Activity extends AppCompatActivity {
         super.onStop();
 
         writeCode();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putInt("Level", cant);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 }

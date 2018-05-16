@@ -76,15 +76,85 @@ public class Game1Activity extends AppCompatActivity {
 
         final DatabaseReference myRef = database.getReference(code);
 
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            nivel = savedInstanceState.getInt("Level");
+            secuencia= new int[nivel];
+            secuen_answer = new int[nivel];
+            ended=false;
+            index=0;
+            cont=0;
+            index_answ=0;
+            timerHandler.postDelayed(timerRunnable, 0);
+            comenzar();
+
+        } else {
+
+
+
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+            //NEW
+            LayoutInflater factory = LayoutInflater.from(this);
+            final View view = factory.inflate(R.layout.level_dialog, null);
+            alertDialog.setView(view);
+
+            alertDialog.setCancelable(false);
+
+            Button button = view.findViewById(R.id.button2);
+            Button button2 = view.findViewById(R.id.button3);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    nivel =1;
+                    secuencia = new int[nivel];
+                    secuen_answer = new int[nivel];
+                    alertDialog.dismiss();
+                }
+            });
+
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    myRef.child("Colores").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String record_actual_s = dataSnapshot.getValue().toString();
+                            int record_actual = Integer.parseInt(record_actual_s);
+                            if(record_actual>nivel){
+                                nivel = record_actual;
+                                secuencia= new int[nivel];
+                                secuen_answer = new int[nivel];
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    alertDialog.dismiss();
+                }
+            });
+
+
+            alertDialog.setTitle(getString(R.string.start_question));
+
+            alertDialog.show();
+            // Probably initialize members with default values for a new instance
+        }
+
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild(getString(R.string.Colores))){
-                    myRef.child(getString(R.string.Colores)).setValue("1");
+                if(!dataSnapshot.hasChild("Colores")){
+                    myRef.child("Colores").setValue("1");
                     text_level.setText(getString(R.string.Record)+1);
                 }else{
-                    text_level.setText(getString(R.string.Record)+ dataSnapshot.child(getString(R.string.Colores)).getValue().toString());
+                    text_level.setText(getString(R.string.Record)+ dataSnapshot.child("Colores").getValue().toString());
                 }
                 text_level.setVisibility(View.VISIBLE);
 
@@ -96,57 +166,6 @@ public class Game1Activity extends AppCompatActivity {
             }
         });
 
-
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-
-        //NEW
-        LayoutInflater factory = LayoutInflater.from(this);
-        final View view = factory.inflate(R.layout.level_dialog, null);
-        alertDialog.setView(view);
-
-        alertDialog.setCancelable(false);
-
-        Button button = view.findViewById(R.id.button2);
-        Button button2 = view.findViewById(R.id.button3);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nivel =1;
-                secuencia = new int[nivel];
-                secuen_answer = new int[nivel];
-                alertDialog.dismiss();
-            }
-        });
-
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myRef.child(getString(R.string.Colores)).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String record_actual_s = dataSnapshot.getValue().toString();
-                        int record_actual = Integer.parseInt(record_actual_s);
-                        if(record_actual>nivel){
-                            nivel = record_actual;
-                            secuencia= new int[nivel];
-                            secuen_answer = new int[nivel];
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-                alertDialog.dismiss();
-            }
-        });
-
-
-        alertDialog.setTitle(getString(R.string.start_question));
-
-        alertDialog.show();
 
 
         btn_start.setOnClickListener(new View.OnClickListener() {
@@ -188,6 +207,10 @@ public class Game1Activity extends AppCompatActivity {
     }
 
     private void jugar() {
+        btn_blue.setEnabled(false);
+        btn_pink.setEnabled(false);
+        btn_green.setEnabled(false);
+        btn_red.setEnabled(false);
         int rand =0;
        if(cont<secuencia.length){
            do {
@@ -196,6 +219,10 @@ public class Game1Activity extends AppCompatActivity {
            changeColor(rand);
            cont ++;
        }else{
+           btn_blue.setEnabled(true);
+           btn_pink.setEnabled(true);
+           btn_green.setEnabled(true);
+           btn_red.setEnabled(true);
        }
 
         if(cont==secuencia.length){
@@ -284,11 +311,13 @@ public class Game1Activity extends AppCompatActivity {
                         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                String current_s = dataSnapshot.getValue().toString();
-                                int record_actual = Integer.parseInt(current_s);
-                                if(nivel>record_actual){
-                                    myRef.setValue(String.valueOf(nivel-1));
-                                    text_level.setText(getString(R.string.Record)+ (nivel-1));
+                                if(dataSnapshot.getValue()!=null) {
+                                    String current_s = dataSnapshot.getValue().toString();
+                                    int record_actual = Integer.parseInt(current_s);
+                                    if (nivel > record_actual) {
+                                        myRef.setValue(String.valueOf(nivel - 1));
+                                        text_level.setText(getString(R.string.Record) + (nivel - 1));
+                                    }
                                 }
                             }
 
@@ -316,20 +345,20 @@ public class Game1Activity extends AppCompatActivity {
 
     private void toBlack() {
         //btn_blue.setBackgroundColor(0xf0000000);
-        btn_blue.setBackground(getDrawable(R.drawable.btn_black));
+        btn_blue.setBackground(getDrawable(R.drawable.btn_black_b));
 
-        btn_red.setBackground(getDrawable(R.drawable.btn_black));
-        btn_pink.setBackground(getDrawable(R.drawable.btn_black));
-        btn_green.setBackground(getDrawable(R.drawable.btn_black));
+        btn_red.setBackground(getDrawable(R.drawable.btn_black_r));
+        btn_pink.setBackground(getDrawable(R.drawable.btn_black_p));
+        btn_green.setBackground(getDrawable(R.drawable.btn_black_g));
     }
 
     private void changeColor(int rand) {
 
         if(rand<=25){
             btn_blue.setBackground(getDrawable(R.drawable.btn_blue));
-            btn_red.setBackground(getDrawable(R.drawable.btn_black));
-            btn_pink.setBackground(getDrawable(R.drawable.btn_black));
-            btn_green.setBackground(getDrawable(R.drawable.btn_black));
+            btn_red.setBackground(getDrawable(R.drawable.btn_black_r));
+            btn_pink.setBackground(getDrawable(R.drawable.btn_black_p));
+            btn_green.setBackground(getDrawable(R.drawable.btn_black_g));
 
             if(!ended) {
                 actual = 1;
@@ -342,9 +371,9 @@ public class Game1Activity extends AppCompatActivity {
 
         }else if(rand<=50){
             btn_green.setBackground(getDrawable(R.drawable.btn_green));
-            btn_red.setBackground(getDrawable(R.drawable.btn_black));
-            btn_pink.setBackground(getDrawable(R.drawable.btn_black));
-            btn_blue.setBackground(getDrawable(R.drawable.btn_black));
+            btn_red.setBackground(getDrawable(R.drawable.btn_black_r));
+            btn_pink.setBackground(getDrawable(R.drawable.btn_black_p));
+            btn_blue.setBackground(getDrawable(R.drawable.btn_black_b));
 
             if(!ended) {
                 actual = 2;
@@ -355,9 +384,9 @@ public class Game1Activity extends AppCompatActivity {
 
         }else if(rand<=75){
             btn_pink.setBackground(getDrawable(R.drawable.btn_pink));
-            btn_red.setBackground(getDrawable(R.drawable.btn_black));
-            btn_blue.setBackground(getDrawable(R.drawable.btn_black));
-            btn_green.setBackground(getDrawable(R.drawable.btn_black));
+            btn_red.setBackground(getDrawable(R.drawable.btn_black_r));
+            btn_blue.setBackground(getDrawable(R.drawable.btn_black_b));
+            btn_green.setBackground(getDrawable(R.drawable.btn_black_g));
 
             if(!ended) {
                 actual = 3;
@@ -368,9 +397,9 @@ public class Game1Activity extends AppCompatActivity {
 
         }else{
             btn_red.setBackground(getDrawable(R.drawable.btn_red));
-            btn_blue.setBackground(getDrawable(R.drawable.btn_black));
-            btn_pink.setBackground(getDrawable(R.drawable.btn_black));
-            btn_green.setBackground(getDrawable(R.drawable.btn_black));
+            btn_blue.setBackground(getDrawable(R.drawable.btn_black_b));
+            btn_pink.setBackground(getDrawable(R.drawable.btn_black_p));
+            btn_green.setBackground(getDrawable(R.drawable.btn_black_g));
 
             if(!ended) {
                 actual = 4;
@@ -423,6 +452,13 @@ public class Game1Activity extends AppCompatActivity {
         super.onStop();
         writeCode();
     }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putInt("Level", nivel);
 
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
 }

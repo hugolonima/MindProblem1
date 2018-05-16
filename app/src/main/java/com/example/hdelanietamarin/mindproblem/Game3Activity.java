@@ -2,6 +2,8 @@ package com.example.hdelanietamarin.mindproblem;
 
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -37,7 +40,9 @@ public class Game3Activity extends AppCompatActivity implements View.OnClickList
     private DrawingView drawView;
     private ImageButton currPaint, drawBtn, eraseBtn, newBtn, saveBtn;
     private Canvas canvas;
+    public Bitmap bm;
     private float smallBrush, mediumBrush, largeBrush;
+    final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +67,23 @@ public class Game3Activity extends AppCompatActivity implements View.OnClickList
         eraseBtn.setOnClickListener(this);
         drawView.setBrushSize(mediumBrush);
         drawBtn.setOnClickListener(this);
+
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            //cant = savedInstanceState.getInt("Level");
+            Bundle b = new Bundle();
+            b = savedInstanceState.getBundle("Bitmap");
+            byte[] byteArray = b.getByteArray("image");
+            //byte[] byteArray = getArgument().getByteArrayExtra("image");
+            Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            drawView.setBm(bmp);
+
+           // drawView.getCanvas().restore();
+
+            //canvas = new Canvas(bmp);
+            //drawView.setBitmap(bmp);
+
+        }
 
     }
 
@@ -220,7 +242,7 @@ private void download() {
     try {
 
         if (Build.VERSION.SDK_INT >= 23) {
-            final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 1;
+
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                     PackageManager.PERMISSION_GRANTED) {
 
@@ -256,5 +278,63 @@ private void download() {
         } catch (Exception e) {
 
         }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WRITE_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    int month = Calendar.getInstance().get(Calendar.MONTH)+1;
+                    int year = Calendar.getInstance().get(Calendar.YEAR);
+                    int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+
+                    drawView.setDrawingCacheEnabled(true);
+                    String imgSaved = MediaStore.Images.Media.insertImage(
+                            getContentResolver(), drawView.getDrawingCache(),
+                            UUID.randomUUID().toString()+".png", getString(R.string.draw) +day+"/"+month+"/"+year);
+                    if(imgSaved!=null) {
+                        Toast savedToast = Toast.makeText(getApplicationContext(),
+                                R.string.save_ok, Toast.LENGTH_SHORT);
+                        savedToast.show();
+                    }else{
+                        Toast unsavedToast = Toast.makeText(getApplicationContext(),
+                                R.string.save_wrong, Toast.LENGTH_SHORT);
+                        unsavedToast.show();
+                    }
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        drawView.getCanvas().save();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        drawView.getCanvasBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        Bundle b = new Bundle();
+        b.putByteArray("image",byteArray);
+        savedInstanceState.putBundle("Bitmap",b);
+        //drawView.setBm(drawView.getCanvasBitmap());
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 }

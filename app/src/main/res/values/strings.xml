@@ -65,7 +65,7 @@
     <string name="level">Nivel:</string>
     <string name="memoriza">Trata de memorizar los números antes de que desaparezcan</string>
     <string name="pulsa">Pulsa para empezar</string>
-    <string name="check">Comprobar</string>
+    <string name="check">Check</string>
     <string name="ok" translatable="false">Ok</string>
     <string name="dibuja">Dibuja</string>
     <string name="continuar" translatable="false">Continuar</string>
@@ -81,6 +81,10 @@
     <string name="back">Volver a la pantalla inicial</string>
     <string name="desde_0">Desde 0</string>
     <string name="record_anterior">Desde el récord anterior</string>
+    <string name="compartir">Compartir</string>
+    <string name="consultar">Consultar récords</string>
+    <string name="cerrar">Cerrar</string>
+    <string name="atras">Atrás</string>
 
 
 </resources>
