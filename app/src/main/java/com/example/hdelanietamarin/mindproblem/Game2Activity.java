@@ -216,7 +216,7 @@ public class Game2Activity extends AppCompatActivity {
 
 
 
-                final DatabaseReference myRef = database.getReference(code).child(getString(R.string.numeros));
+                final DatabaseReference myRef = database.getReference(code).child("Números");
                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
