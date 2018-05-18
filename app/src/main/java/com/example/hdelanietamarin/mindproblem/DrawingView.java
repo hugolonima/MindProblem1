@@ -31,6 +31,7 @@ public class DrawingView extends View{
     }
 
 
+
     private Path drawPath;
     private Paint drawPaint, canvasPaint;
     private int paintColor = 0xFF660000;
@@ -41,9 +42,11 @@ public class DrawingView extends View{
     public Canvas getCanvas(){
         return drawCanvas;
     }
+
     public void setBm(Bitmap bm){
         bm = this.bm;
     }
+
     public void setupDrawing() {
         brushSize = getResources().getInteger(R.integer.medium_size);
         lastBrushSize = brushSize;

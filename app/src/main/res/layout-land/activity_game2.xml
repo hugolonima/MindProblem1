@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/btn_ya"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.example.hdelanietamarin.mindproblem.Game2Activity">
+
+
+    <TextView
+        android:id="@+id/textview"
+        android:layout_width="350dp"
+        android:layout_height="120dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:justificationMode="none"
+        android:text="@string/memoriza"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/edit_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btn_check"
+        android:layout_alignLeft="@+id/btn_ready"
+        android:layout_alignStart="@+id/btn_ready"
+        android:ems="10"
+        android:inputType="number"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/text_number"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btn_ready"
+        android:layout_width="290dp"
+        android:layout_height="80dp"
+        android:layout_above="@+id/edit_answer"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/roundedbutton"
+        android:backgroundTint="@color/colorAccent"
+        android:text="@string/pulsa"
+        android:textColor="@android:color/background_light" />
+
+    <Button
+        android:id="@+id/btn_check"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignEnd="@+id/textview"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/textview"
+        android:layout_marginBottom="26dp"
+        android:background="@drawable/roundedbutton"
+        android:backgroundTint="@color/colorAccent"
+        android:text="@string/check"
+        android:textColor="@android:color/background_light"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/text_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/level"
+        android:textSize="18sp"
+        android:visibility="invisible" />
+
+</android.widget.RelativeLayout>

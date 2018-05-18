@@ -33,9 +33,9 @@ Button btn_back, btn_to_game;
         if(language.contains("ca")){
             image.setImageDrawable(getDrawable(R.drawable.bubble_draw_ca));
         }else{
-            if(language.contains("Engl")){
+            if(language.contains("En")){
                 //TODO: Hacer la imagen en inglés
-                image.setImageDrawable(getDrawable(R.drawable.bubble_draw_ca));
+                image.setImageDrawable(getDrawable(R.drawable.bubble_draw_en));
             }else{
                 image.setImageDrawable(getDrawable(R.drawable.bubble_draw));
             }

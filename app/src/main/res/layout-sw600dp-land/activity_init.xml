@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="com.example.hdelanietamarin.mindproblem.InitActivity">
+
+    <Button
+        android:id="@+id/btn_game1"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_marginLeft="122dp"
+        android:layout_marginStart="122dp"
+        android:layout_marginTop="111dp"
+        android:background="@drawable/roundedbutton"
+        android:backgroundTint="@color/colorAccent"
+        android:text="@string/Colores"
+        android:textColor="@android:color/background_light" />
+
+    <Button
+        android:id="@+id/btn_game2"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignTop="@+id/btn_game1"
+        android:layout_marginLeft="85dp"
+        android:layout_marginStart="85dp"
+        android:layout_toEndOf="@+id/btn_game1"
+        android:layout_toRightOf="@+id/btn_game1"
+        android:background="@drawable/roundedbutton"
+        android:backgroundTint="@color/colorAccent"
+        android:text="@string/numeros"
+        android:textColor="@android:color/background_light" />
+
+    <Button
+        android:id="@+id/btn_game3"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignLeft="@+id/btn_game1"
+        android:layout_alignStart="@+id/btn_game1"
+        android:layout_alignTop="@+id/btn_game4"
+        android:background="@drawable/roundedbutton"
+        android:backgroundTint="@color/colorAccent"
+        android:text="@string/dibuja"
+        android:textColor="@android:color/background_light" />
+
+    <Button
+        android:id="@+id/btn_game4"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignLeft="@+id/btn_game2"
+        android:layout_alignStart="@+id/btn_game2"
+        android:layout_below="@+id/btn_game2"
+        android:layout_marginTop="55dp"
+        android:background="@drawable/roundedbutton"
+        android:backgroundTint="@color/colorAccent"
+        android:text="@string/dibujos"
+        android:textColor="@android:color/background_light" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="46dp"
+        android:layout_marginRight="46dp"
+        android:layout_marginTop="99dp"
+        app:srcCompat="@drawable/bubble_init" />
+</android.widget.RelativeLayout>

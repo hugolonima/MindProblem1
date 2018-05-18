@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="130dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="201dp"
+        android:background="@drawable/dialog_button"
+        android:layout_marginBottom="20dp"
+        android:text="@string/ok" />
+
+    <TextView
+        android:id="@+id/tV_record1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tV_record2"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/tV_record2"
+        android:layout_marginTop="26dp"
+        android:text="TextView"
+        android:textColor="@color/Black"
+        android:textSize="19sp" />
+
+    <TextView
+        android:id="@+id/tV_name1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tV_record1"
+        android:layout_alignBottom="@+id/tV_record1"
+        android:layout_toLeftOf="@+id/button3"
+        android:layout_toStartOf="@+id/button3"
+        android:text="@string/Colores"
+        android:textColor="@color/Black"
+        android:textSize="19sp" />
+
+    <TextView
+        android:id="@+id/tV_name2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tV_name1"
+        android:layout_alignStart="@+id/tV_name1"
+        android:layout_below="@+id/tV_name1"
+        android:layout_marginTop="30dp"
+        android:text="@string/numeros"
+        android:textColor="@color/Black"
+        android:textSize="19sp" />
+
+    <TextView
+        android:id="@+id/tV_record2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tV_name2"
+        android:layout_alignBottom="@+id/tV_name2"
+        android:layout_alignLeft="@+id/tV_record3"
+        android:layout_alignStart="@+id/tV_record3"
+        android:text="TextView"
+        android:textColor="@color/Black"
+        android:textSize="19sp" />
+
+    <TextView
+        android:id="@+id/tV_name3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tV_name2"
+        android:layout_alignStart="@+id/tV_name2"
+        android:layout_below="@+id/tV_name2"
+        android:layout_marginTop="32dp"
+        android:text="@string/dibujos"
+        android:textColor="@color/Black"
+        android:textSize="19sp"
+        />
+
+    <TextView
+        android:id="@+id/tV_record3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tV_name3"
+        android:layout_toEndOf="@+id/button3"
+        android:layout_toRightOf="@+id/button3"
+        android:text="TextView"
+        android:textColor="@color/Black"
+        android:textSize="19sp" />
+
+</android.widget.RelativeLayout>

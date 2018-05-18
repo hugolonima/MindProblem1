@@ -36,7 +36,7 @@ public class InstrActi4Activity extends AppCompatActivity {
         }else{
             if(language.contains("Engl")){
                 //TODO: Hacer la imagen en inglés
-                image.setImageDrawable(getDrawable(R.drawable.buble_dibujos_ca));
+                image.setImageDrawable(getDrawable(R.drawable.bubble_dibujos_en));
             }else{
                 image.setImageDrawable(getDrawable(R.drawable.bubble_dibujos));
             }

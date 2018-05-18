@@ -61,7 +61,7 @@
     <string name="level">"Nivell: "</string>
     <string name="memoriza">"Tracta de memoritzar els nombres abans que desapareguin "</string>
     <string name="pulsa">"Prem per començar "</string>
-    <string name="check">"Check "</string>
+    <string name="check">" "</string>
     <string name="dibuja">"Dibuixa "</string>
     <string name="user_name_question">"Quin vols que sigui el teu nom d'usuari? "</string>
     <string name="date_">"Data de naixement "</string>
@@ -77,4 +77,7 @@
     <string name="consultar">Consultar récords</string>
     <string name="cerrar">Tancar</string>
     <string name="atras">Enrere</string>
+    <string name="yes">¡Sí!</string>
+    <string name="no">¡No!</string>
+    <string name="continuar">Continuar</string>
 </resources>

@@ -44,5 +44,5 @@
         android:backgroundTint="@color/colorAccent"
         android:background="@drawable/roundedbutton"
         android:textColor="@android:color/background_light"
-        android:text="Atrás" />
+        android:text="@string/atras" />
 </android.widget.RelativeLayout>

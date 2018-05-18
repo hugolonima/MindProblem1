@@ -65,18 +65,18 @@
     <string name="level">Nivel:</string>
     <string name="memoriza">Trata de memorizar los números antes de que desaparezcan</string>
     <string name="pulsa">Pulsa para empezar</string>
-    <string name="check">Check</string>
+    <string name="check" translatable="false">Check</string>
     <string name="ok" translatable="false">Ok</string>
     <string name="dibuja">Dibuja</string>
-    <string name="continuar" translatable="false">Continuar</string>
+    <string name="continuar">Continuar</string>
     <string name="user_name_question">¿Cuál quieres que sea tu nombre de usuario?</string>
     <string name="date_">Fecha de nacimiento</string>
     <string name="enter">Entrar</string>
     <string name="year">Año</string>
     <string name="month">Mes(número)</string>
     <string name="day">Día</string>
-    <string name="yes" translatable="false">¡Sí!</string>
-    <string name="no" translatable="false">¡No!</string>
+    <string name="yes">¡Sí!</string>
+    <string name="no">¡No!</string>
     <string name="try_again">Volverlo a intentar</string>
     <string name="back">Volver a la pantalla inicial</string>
     <string name="desde_0">Desde 0</string>

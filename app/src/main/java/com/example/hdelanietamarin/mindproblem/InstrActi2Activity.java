@@ -36,9 +36,9 @@ public class InstrActi2Activity extends AppCompatActivity {
         if(language.contains("ca")){
             image.setImageDrawable(getDrawable(R.drawable.bubble_numbers_ca));
         }else{
-            if(language.contains("Engl")){
+            if(language.contains("En")){
                 //TODO: Hacer la imagen en inglés
-                image.setImageDrawable(getDrawable(R.drawable.bubble_numbers_ca));
+                image.setImageDrawable(getDrawable(R.drawable.bubble_numbers_en));
             }else{
                 image.setImageDrawable(getDrawable(R.drawable.bubble_numbers));
             }

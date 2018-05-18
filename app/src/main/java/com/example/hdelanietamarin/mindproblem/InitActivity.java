@@ -59,8 +59,8 @@ String code;
         if(language.contains("ca")){
             image.setImageDrawable(getDrawable(R.drawable.bubble_init_ca));
         }else{
-            if(language.contains("Engl")){
-                image.setImageDrawable(getDrawable(R.drawable.bubble_init));
+            if(language.contains("En")){
+                image.setImageDrawable(getDrawable(R.drawable.bubble_init_en));
             }else{
                 image.setImageDrawable(getDrawable(R.drawable.bubble_init));
             }
