@@ -51,6 +51,20 @@ public class ImageAdapter extends BaseAdapter {
         return imageView;
     }
 
+    public int[] getAll(){
+        int[] plantilla = new int[mThumbIds.length];
+        for(int i=0; i<mThumbIds.length; i++){
+            plantilla[i] = mThumbIds[i].intValue();
+        }
+        return plantilla;
+    }
+
+    public void setAll(int[] grid){
+        for(int i=0; i<grid.length; i++){
+            mThumbIds[i] = grid[i];
+        }
+    }
+
     public int addImage(){
         int code =0;
         Random r = new Random();

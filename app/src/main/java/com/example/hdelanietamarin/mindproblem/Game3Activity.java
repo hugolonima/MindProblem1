@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -255,13 +256,47 @@ private void download() {
                         getContentResolver(), drawView.getDrawingCache(),
                         UUID.randomUUID().toString()+".png", getString(R.string.draw) +day+"/"+month+"/"+year);
                 if(imgSaved!=null) {
-                    Toast savedToast = Toast.makeText(getApplicationContext(),
+
+                    final android.support.v7.app.AlertDialog alertDialog = new android.support.v7.app.AlertDialog.Builder(this).create();
+                    alertDialog.setTitle(getString(R.string.save_ok));
+                    alertDialog.setCancelable(false);
+                    LayoutInflater factory = LayoutInflater.from(this);
+                    final View view_ = factory.inflate(R.layout.login_dialog, null);
+                    alertDialog.setView(view_);
+
+                    Button button2 = view_.findViewById(R.id.button3);
+                    button2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.show();
+                   /* Toast savedToast = Toast.makeText(getApplicationContext(),
                             R.string.save_ok, Toast.LENGTH_SHORT);
-                    savedToast.show();
+                    savedToast.show();*/
                 }else{
-                    Toast unsavedToast = Toast.makeText(getApplicationContext(),
+                    final android.support.v7.app.AlertDialog alertDialog = new android.support.v7.app.AlertDialog.Builder(this).create();
+                    alertDialog.setTitle(getString(R.string.save_wrong));
+                    alertDialog.setCancelable(false);
+                    LayoutInflater factory = LayoutInflater.from(this);
+                    final View view_ = factory.inflate(R.layout.login_dialog, null);
+                    alertDialog.setView(view_);
+
+                    Button button2 = view_.findViewById(R.id.button3);
+                    button2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.show();
+
+                    /*Toast unsavedToast = Toast.makeText(getApplicationContext(),
                             R.string.save_wrong, Toast.LENGTH_SHORT);
-                    unsavedToast.show();
+                    unsavedToast.show();*/
                 }
 
 

@@ -29,6 +29,8 @@ import java.util.Random;
 
 public class Game4Activity extends AppCompatActivity {
 
+    //TODO: un get all y un set all para que pasando, y devolviendo un array del
+    //1 al 4 podamos pillar todos los dibujos y volver a ponerlos
     Button btn_check;
     TextView text_view, text_level;
     EditText editText;
@@ -36,7 +38,9 @@ public class Game4Activity extends AppCompatActivity {
     ImageAdapter imageAdapter;
     GridView gridview;
     FirebaseDatabase database;
-    String code;
+    String code; String text;
+    int[] plantilla;
+    Boolean iniciado = false;
     int codigo =0;
     int level=1;
     @Override
@@ -59,10 +63,13 @@ public class Game4Activity extends AppCompatActivity {
         if (savedInstanceState != null) {
             // Restore value of members from saved state
             level = savedInstanceState.getInt("Level");
-            Log.i("Hugo", "Saved instance");
+            codigo = savedInstanceState.getInt("Codigo");
+            text = savedInstanceState.getString("Text");
+            iniciado = savedInstanceState.getBoolean("Iniciado");
+            plantilla = savedInstanceState.getIntArray("Plantilla");
+
 
         }
-        Log.i("Hugo", "Level: " + level);
 
 
 
@@ -116,11 +123,27 @@ public class Game4Activity extends AppCompatActivity {
         if(level>5) {
             gridview.setNumColumns(4);
             imageAdapterBig = new ImageAdapterBig(this);
-            text_view.setText(generateText());
+            if((plantilla!=null)&&(iniciado)){
+                imageAdapterBig.setAll(plantilla);
+            }
+            if(!iniciado) {
+                text_view.setText(generateText());
+                iniciado = true;
+            }else {
+                text_view.setText(text);
+            }
             gridview.setAdapter(imageAdapterBig);
         }else{
             imageAdapter = new ImageAdapter(this);
-            text_view.setText(generateText());
+            if((plantilla!=null)&&(iniciado)){
+                imageAdapter.setAll(plantilla);
+            }
+            if (!iniciado) {
+                text_view.setText(generateText());
+                iniciado = true;
+            }else {
+                text_view.setText(text);
+            }
             gridview.setAdapter(imageAdapter);
         }
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -189,6 +212,7 @@ public class Game4Activity extends AppCompatActivity {
                 button2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        iniciado=false;
                         jugar(gridview);
                         alertDialog.dismiss();
                     }
@@ -271,7 +295,10 @@ public class Game4Activity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
         savedInstanceState.putInt("Level", level);
-
+        savedInstanceState.putInt("Codigo", codigo);
+        savedInstanceState.putString("Text", text_view.getText().toString());
+        savedInstanceState.putBoolean("Iniciado", iniciado);
+        savedInstanceState.putIntArray("Plantilla", imageAdapter.getAll());
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }

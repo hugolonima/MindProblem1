@@ -79,14 +79,17 @@ public class Game1Activity extends AppCompatActivity {
         if (savedInstanceState != null) {
             // Restore value of members from saved state
             nivel = savedInstanceState.getInt("Level");
-            secuencia= new int[nivel];
-            secuen_answer = new int[nivel];
-            ended=false;
-            index=0;
-            cont=0;
-            index_answ=0;
-            timerHandler.postDelayed(timerRunnable, 0);
+            secuencia = savedInstanceState.getIntArray("Secuencia");
+            secuen_answer = savedInstanceState.getIntArray("Respuesta");
+
+
+            ended=savedInstanceState.getBoolean("Ended");
+            index= savedInstanceState.getInt("Index");
+            cont=savedInstanceState.getInt("Cont");
+            index_answ=savedInstanceState.getInt("Index_answer");
+
             comenzar();
+            timerHandler.postDelayed(timerRunnable, 0);
 
         } else {
 
@@ -456,6 +459,13 @@ public class Game1Activity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
         savedInstanceState.putInt("Level", nivel);
+        savedInstanceState.putIntArray("Secuencia", secuencia);
+        savedInstanceState.putIntArray("Respuesta", secuen_answer);
+        savedInstanceState.putBoolean("Ended", ended);
+        savedInstanceState.putInt("Index", index);
+        savedInstanceState.putInt("Cont", cont);
+        savedInstanceState.putInt("Index_answer", index_answ);
+
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);

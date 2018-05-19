@@ -37,6 +37,8 @@ public class Game2Activity extends AppCompatActivity {
     private static final String  FILENAME_CODE = "user.txt";
     String code;
     FirebaseDatabase database;
+    String number;
+    Boolean visible = true;
 
 
     int contador = 0;
@@ -48,6 +50,9 @@ public class Game2Activity extends AppCompatActivity {
 
             if (contador == 0) {
                 jugar();
+                if(((number!=null))&&(visible==false)) {
+                    text_number.setText(String.valueOf(number));
+                }
                 btn_ready.setVisibility(View.INVISIBLE);
                 timerHandler.postDelayed(this, 3000);
                 contador++;
@@ -73,6 +78,7 @@ public class Game2Activity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         code = getIntent().getStringExtra("code");
 
+
         final DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child(String.valueOf(code));
         edit_answer.setOnFocusChangeListener(new View.OnFocusChangeListener() {//detecta si se pulsa fuera del textview. también hace falta añadir focusable y clickable en el xml
             @Override
@@ -87,7 +93,21 @@ public class Game2Activity extends AppCompatActivity {
         if (savedInstanceState != null) {
             // Restore value of members from saved state
             cant = savedInstanceState.getInt("Level");
+            number = savedInstanceState.getString("Number");
+            visible = savedInstanceState.getBoolean("Play");
+            if(!visible) {
+                if (number != null) {
+                    if (!number.equals("")) {
+                        text_number.setVisibility(View.VISIBLE);
+                        edit_answer.setVisibility(View.INVISIBLE);
+                        btn_ready.setVisibility(View.INVISIBLE);
+                        btn_check.setVisibility(View.INVISIBLE);
+                        jugar();
+                        timerHandler.postDelayed(timerRunnable, 0);
+                    }
 
+                }
+            }
         } else {
 
 
@@ -167,11 +187,11 @@ public class Game2Activity extends AppCompatActivity {
 
 
 
-
-
         btn_ready.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                jugar();
+                text_number.setVisibility(View.VISIBLE);
                 timerHandler.postDelayed(timerRunnable, 0);
 
             }
@@ -362,8 +382,9 @@ public class Game2Activity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
+        savedInstanceState.putBoolean("Play", btn_ready.getVisibility()==View.VISIBLE);
         savedInstanceState.putInt("Level", cant);
-
+        savedInstanceState.putString("Number", text_number.getText().toString());
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }

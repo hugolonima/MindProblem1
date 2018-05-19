@@ -404,7 +404,7 @@ public class LoginActivity extends AppCompatActivity {
                                     });
                                     alertDialog.show();
                                 }
-                            }else{
+                            }else if(text_date.getVisibility()==View.VISIBLE){
 
                                 final AlertDialog falertDialog = new AlertDialog.Builder(v.getContext()).create();
                                 falertDialog.setTitle(getString(R.string.fill_all));
