@@ -85,6 +85,8 @@
     <string name="consultar">Consultar récords</string>
     <string name="cerrar">Cerrar</string>
     <string name="atras">Atrás</string>
+    <string name="actual_records">Estos son tus récords actuales</string>
+    <string name="info_records">Si aún no has jugado a alguno de ellos te saldrá un 0 como récord</string>
 
 
 </resources>

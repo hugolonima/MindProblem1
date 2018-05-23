@@ -79,4 +79,6 @@
     <string name="cerrar">Close</string>
     <string name="atras">Back</string>
     <string name="continuar">Continue</string>
+    <string name="actual_records">"These are your current records "</string>
+    <string name="info_records">"If you have not played any of them, you will get a 0 as a record "</string>
 </resources>

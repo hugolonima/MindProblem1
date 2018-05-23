@@ -67,7 +67,8 @@
         android:layout_below="@+id/month_text"
         android:ems="10"
         android:hint="@string/year"
-        android:inputType="date"
+        android:maxLength="4"
+        android:inputType="number"
         android:visibility="invisible" />
 
     <EditText
@@ -81,8 +82,9 @@
         android:layout_below="@+id/day_text"
         android:ems="10"
         android:hint="@string/month"
+        android:maxLength="2"
         android:visibility="invisible"
-        android:inputType="date" />
+        android:inputType="number" />
 
     <EditText
         android:id="@+id/day_text"
@@ -94,8 +96,9 @@
         android:layout_alignStart="@+id/month_text"
         android:layout_below="@+id/textView3"
         android:ems="10"
+        android:maxLength="2"
         android:hint="@string/day"
         android:visibility="invisible"
-        android:inputType="date" />
+        android:inputType="number" />
 
 </android.widget.RelativeLayout>

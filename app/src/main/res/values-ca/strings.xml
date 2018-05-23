@@ -79,4 +79,6 @@
     <string name="yes">¡Sí!</string>
     <string name="no">¡No!</string>
     <string name="continuar">Continuar</string>
+    <string name="actual_records">"Aquests són els teus rècords actuals "</string>
+    <string name="info_records">"Si encara no has jugat a algun d'ells et sortirà un 0 com a rècord "</string>
 </resources>

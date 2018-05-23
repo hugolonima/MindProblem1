@@ -11,6 +11,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -23,7 +26,8 @@ public class DrawingView extends View{
 
     private float brushSize, lastBrushSize;
     private boolean erase=false;
-    public Bitmap bm;
+    public Bitmap bmp;
+    public int cont = 0;
 
     public DrawingView(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -40,11 +44,14 @@ public class DrawingView extends View{
 
 
     public Canvas getCanvas(){
+
         return drawCanvas;
     }
 
     public void setBm(Bitmap bm){
-        bm = this.bm;
+        if((bm!=null)&&(!bm.equals(""))) {
+            bmp = bm;
+        }
     }
 
     public void setupDrawing() {
@@ -94,18 +101,26 @@ public class DrawingView extends View{
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-
+        if((bmp!=null)&&(cont==0)){
+           // canvasBitmap = bmp;
+            /*canvasBitmap = bmp.copy(Bitmap.Config.ARGB_8888, true);//&lt;--true makes copy mutable
+            drawCanvas = new Canvas(canvasBitmap);*/
+            //canvasBitmap.setConfig(Bitmap.Config.ARGB_8888);
             canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             drawCanvas = new Canvas(canvasBitmap);
+            drawCanvas.drawBitmap(bmp, 0, 0, canvasPaint);
+            cont ++;
+        }else {
+            canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            drawCanvas = new Canvas(canvasBitmap);
+        }
 
 
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if(bm!=null){
-            canvasBitmap = bm;
-        }
+
         canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
         canvas.drawPath(drawPath, drawPaint);
     }
@@ -113,8 +128,8 @@ public class DrawingView extends View{
         return canvasBitmap;
     }
 
-    public void setBitmap(Bitmap bmp){
-
+    public void setBitmap(Bitmap bm){
+        bmp = bm;
         drawCanvas.setBitmap(bmp);
     }
 
@@ -147,5 +162,41 @@ public class DrawingView extends View{
         paintColor = Color.parseColor(newColor);
         drawPaint.setColor(paintColor);
     }
+
+
+
+
+    //TODO: Esta es la que tengo que toquetear
+
+   /* private static class SavedState extends View.BaseSavedState {
+        int value;
+        Canvas canvas;//this will store the current value from ValueBar
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            value = in.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(value);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR
+                = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+    }*/
 
 }

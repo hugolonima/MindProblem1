@@ -76,12 +76,30 @@ String code;
         if(code==null){
             readCode();
         }
+        Log.i("Hugo", code);
 
+        dref = database.getReference();//.child(String.valueOf(code));
+        dref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild(String.valueOf(code))) {
+                    Intent intent = new Intent(InitActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                } else {
+                    dref = database.getReference().child(String.valueOf(code));
+                }
+            }
 
-        dref = database.getReference().child(String.valueOf(code));
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
         if(code!=null){
             writeCode();
+            dref = database.getReference().child(String.valueOf(code));
+            actualize();
+
         }
 
         if(code==null){
@@ -133,9 +151,6 @@ String code;
 
 
 
-        if(code!=null) {
-            actualize();
-        }
 
 
 
@@ -346,8 +361,8 @@ String code;
                     return true;
             case R.id.action_consultar:
                 final AlertDialog builder_ = new AlertDialog.Builder(this).create();
-                builder_.setTitle("Estos son tus récords actuales");
-                builder_.setMessage("Si aún no has jugado a alguno de ellos te saldrá un 0 como récord");
+                builder_.setTitle(getString(R.string.actual_records));
+                builder_.setMessage(getString(R.string.info_records));
 
                 builder_.setCancelable(false);
                 LayoutInflater factory_ = LayoutInflater.from(this);

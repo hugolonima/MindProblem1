@@ -41,7 +41,7 @@ public class Game2Activity extends AppCompatActivity {
     Boolean visible = true;
 
 
-    int contador = 0;
+    int contador;
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
 
@@ -52,6 +52,7 @@ public class Game2Activity extends AppCompatActivity {
                 jugar();
                 if(((number!=null))&&(visible==false)) {
                     text_number.setText(String.valueOf(number));
+                    number = null;
                 }
                 btn_ready.setVisibility(View.INVISIBLE);
                 timerHandler.postDelayed(this, 3000);

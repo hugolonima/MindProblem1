@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.Calendar;
 import java.util.Random;
@@ -33,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText user_text, day_text, month_text, year_text;
     TextView text_date;
     Button btn_enter;
+    int cont = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(final View v) {
                 hideKeyboard(v);
+                cont ++;
                 final String user = user_text.getText().toString();
                 //final String password = password_text.getText().toString();
                 final DatabaseReference dref = database.getReference();
@@ -65,14 +69,13 @@ public class LoginActivity extends AppCompatActivity {
                                 year_text.setVisibility(View.VISIBLE);
                                 day_text.setVisibility(View.VISIBLE);
                                 month_text.setVisibility(View.VISIBLE);
-
+                                text_date.setVisibility(View.VISIBLE);
 
                                 final DatabaseReference myRef = database.getReference(user);
                                 //myRef.child("Password").setValue(password);
                                 if ((!year_text.getText().toString().equals("")) &&
                                         (!day_text.getText().toString().equals("")) &&
                                         (!month_text.getText().toString().equals(""))) {
-
 
 
 
@@ -98,13 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                                         int num_2 = Integer.parseInt(any);
 
 
-                                        Log.i("Hugo", "num: " + num);
-                                        Log.i("Hugo", "num1: " + num_1);
-                                        Log.i("Hugo", "num2: " + num_2);
 
-                                        Log.i("Hugo", "year: " + year);
-                                        Log.i("Hugo", "month: " + month_calendar);
-                                        Log.i("Hugo", "day: " + day_calendar);
                                         if((num>31)||(num_1>12)){
                                             fecha_correcta=false;
                                         }else{
@@ -149,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                                         final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
                                         alertDialog.setTitle(getString(R.string.entry_error));
                                         alertDialog
-                                                .setMessage("Parece que la fecha introducida no es correcta, vuelve a probar sin caracteres especiales y con una fecha real");
+                                                .setMessage("Parece que la fecha introducida no es correcta, vuelve a probar con una fecha real");
                                         alertDialog.setCancelable(false);
                                         LayoutInflater factory = LayoutInflater.from(v.getContext());
                                         final View view_ = factory.inflate(R.layout.login_dialog, null);
@@ -168,24 +165,26 @@ public class LoginActivity extends AppCompatActivity {
                                         alertDialog.show();
                                     }
                                 } else {
-                                    final AlertDialog falertDialog = new AlertDialog.Builder(v.getContext()).create();
-                                    falertDialog.setTitle(getString(R.string.fill_all));
-                                    falertDialog
-                                            .setMessage(getString(R.string.introduce_fecha));
-                                    falertDialog.setCancelable(false);
-                                    LayoutInflater factory = LayoutInflater.from(v.getContext());
-                                    final View view_ = factory.inflate(R.layout.login_dialog, null);
-                                    falertDialog.setView(view_);
+                                    if (cont > 1) {
+                                        final AlertDialog falertDialog = new AlertDialog.Builder(v.getContext()).create();
+                                        falertDialog.setTitle(getString(R.string.fill_all));
+                                        falertDialog
+                                                .setMessage(getString(R.string.introduce_fecha));
+                                        falertDialog.setCancelable(false);
+                                        LayoutInflater factory = LayoutInflater.from(v.getContext());
+                                        final View view_ = factory.inflate(R.layout.login_dialog, null);
+                                        falertDialog.setView(view_);
 
-                                    Button button2 = view_.findViewById(R.id.button3);
-                                    button2.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            falertDialog.dismiss();
-                                        }
-                                    });
+                                        Button button2 = view_.findViewById(R.id.button3);
+                                        button2.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                falertDialog.dismiss();
+                                            }
+                                        });
 
-                                    falertDialog.show();
+                                        falertDialog.show();
+                                    }
                                 }
                             } else if (!user.equals("")) {
 
@@ -228,6 +227,7 @@ public class LoginActivity extends AppCompatActivity {
                                             public void onClick(View v) {
                                                 alertDialog.dismiss();
                                                 alertDialog_.dismiss();
+                                                user_text.setText("");
                                                 year_text.setText("");
                                                 month_text.setText("");
                                                 day_text.setText("");
@@ -287,13 +287,7 @@ public class LoginActivity extends AppCompatActivity {
                                     int num_2 = Integer.parseInt(any);
 
 
-                                    Log.i("Hugo", "num: " + num);
-                                    Log.i("Hugo", "num1: " + num_1);
-                                    Log.i("Hugo", "num2: " + num_2);
 
-                                    Log.i("Hugo", "year: " + year);
-                                    Log.i("Hugo", "month: " + month_calendar);
-                                    Log.i("Hugo", "day: " + day_calendar);
                                     if(Integer.parseInt(any)>year){
                                         fecha_correcta = false;
                                     }else{
@@ -319,17 +313,10 @@ public class LoginActivity extends AppCompatActivity {
                                            fecha_correcta=true;
                                         }
                                     }
-                                       /* if(Integer.parseInt(any)==year){
-                                            if(Integer.parseInt(mes)>month_calendar){
-                                            fecha_correcta = false;
-                                            }else if(Integer.parseInt(dia)>day_calendar){
-                                            fecha_correcta = false;
 
-                                            }else{
-                                            fecha_correcta = true;
-                                        }
-                                    }*/
-
+                                    //Aquí meto el código para saber si esa fecha ha existido de verdad
+                                    //Formato: "2004-2-29"
+                                    fecha_correcta = isValidDate(any.concat("-").concat(mes).concat("-").concat(dia));
                                     //fecha_correcta= true;
                                 } catch (NumberFormatException e) {
 
@@ -343,36 +330,43 @@ public class LoginActivity extends AppCompatActivity {
                                     dref.child(user).child("Fecha").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            if (date.equals(dataSnapshot.getValue().toString())) {
+                                            if (dataSnapshot.getValue() != null) {
+                                                if (date.equals(dataSnapshot.getValue().toString())) {
+                                                    Intent intent = new Intent(LoginActivity.this, InitActivity.class);
+                                                    intent.putExtra("user", user);
+                                                    startActivity(intent);
+                                                } else {
+                                                    text_date.setVisibility(View.INVISIBLE);
+                                                    year_text.setVisibility(View.INVISIBLE);
+                                                    day_text.setVisibility(View.INVISIBLE);
+                                                    month_text.setVisibility(View.INVISIBLE);
+                                                    user_text.setText("");
+                                                    final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+                                                    alertDialog.setTitle(getString(R.string.entry_error));
+                                                    alertDialog
+                                                            .setMessage(getString(R.string.choose_another));
+                                                    alertDialog.setCancelable(false);
+                                                    LayoutInflater factory = LayoutInflater.from(v.getContext());
+                                                    final View view_ = factory.inflate(R.layout.login_dialog, null);
+                                                    alertDialog.setView(view_);
+
+                                                    Button button2 = view_.findViewById(R.id.button3);
+                                                    button2.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            alertDialog.dismiss();
+                                                            year_text.setText("");
+                                                            month_text.setText("");
+                                                            day_text.setText("");
+                                                        }
+                                                    });
+                                                    alertDialog.show();
+                                                }
+                                            }else{
+                                                dref.child(user).child("Fecha").setValue(getDate());
                                                 Intent intent = new Intent(LoginActivity.this, InitActivity.class);
                                                 intent.putExtra("user", user);
                                                 startActivity(intent);
-                                            } else {
-                                                text_date.setVisibility(View.INVISIBLE);
-                                                year_text.setVisibility(View.INVISIBLE);
-                                                day_text.setVisibility(View.INVISIBLE);
-                                                month_text.setVisibility(View.INVISIBLE);
-                                                user_text.setText("");
-                                                final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
-                                                alertDialog.setTitle(getString(R.string.entry_error));
-                                                alertDialog
-                                                        .setMessage(getString(R.string.choose_another));
-                                                alertDialog.setCancelable(false);
-                                                LayoutInflater factory = LayoutInflater.from(v.getContext());
-                                                final View view_ = factory.inflate(R.layout.login_dialog, null);
-                                                alertDialog.setView(view_);
-
-                                                Button button2 = view_.findViewById(R.id.button3);
-                                                button2.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
-                                                        alertDialog.dismiss();
-                                                        year_text.setText("");
-                                                        month_text.setText("");
-                                                        day_text.setText("");
-                                                    }
-                                                });
-                                                alertDialog.show();
                                             }
                                         }
 
@@ -386,7 +380,7 @@ public class LoginActivity extends AppCompatActivity {
                                     final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
                                     alertDialog.setTitle(getString(R.string.entry_error));
                                     alertDialog
-                                            .setMessage("Parece que la fecha introducida no es correcta, vuelve a probar sin caracteres especiales y con una fecha real");
+                                            .setMessage("Parece que la fecha introducida no es correcta, vuelve a probar con una fecha real");
                                     alertDialog.setCancelable(false);
                                     LayoutInflater factory = LayoutInflater.from(v.getContext());
                                     final View view_ = factory.inflate(R.layout.login_dialog, null);
@@ -450,5 +444,15 @@ public class LoginActivity extends AppCompatActivity {
         date = day_text.getText().toString().concat("/").concat(month_text.getText().toString()).
                 concat("/").concat(year_text.getText().toString());
         return date;
+    }
+    public static boolean isValidDate(String inDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(inDate.trim());
+        } catch (ParseException pe) {
+            return false;
+        }
+        return true;
     }
 }
