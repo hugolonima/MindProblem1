@@ -258,6 +258,7 @@ public class Game4Activity extends AppCompatActivity {
             }
 
         }else{
+            //TODO: HACEER UN DIALOG AQUÍ
             Toast.makeText(this, R.string.valid_number, Toast.LENGTH_LONG).show();
         }
     }

@@ -76,7 +76,7 @@ String code;
         if(code==null){
             readCode();
         }
-        Log.i("Hugo", code);
+//        Log.i("Hugo", code);
 
         dref = database.getReference();//.child(String.valueOf(code));
         dref.addListenerForSingleValueEvent(new ValueEventListener() {

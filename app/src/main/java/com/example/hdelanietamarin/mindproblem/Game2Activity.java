@@ -39,6 +39,7 @@ public class Game2Activity extends AppCompatActivity {
     FirebaseDatabase database;
     String number;
     Boolean visible = true;
+    Boolean responder_visible = false;
 
 
     int contador;
@@ -96,8 +97,9 @@ public class Game2Activity extends AppCompatActivity {
             cant = savedInstanceState.getInt("Level");
             number = savedInstanceState.getString("Number");
             visible = savedInstanceState.getBoolean("Play");
+            responder_visible = savedInstanceState.getBoolean("Visible");
             if(!visible) {
-                if (number != null) {
+                if ((number != null)&&(!responder_visible)) {
                     if (!number.equals("")) {
                         text_number.setVisibility(View.VISIBLE);
                         edit_answer.setVisibility(View.INVISIBLE);
@@ -107,6 +109,13 @@ public class Game2Activity extends AppCompatActivity {
                         timerHandler.postDelayed(timerRunnable, 0);
                     }
 
+                }else if(number!=null){
+                    text_number.setVisibility(View.INVISIBLE);
+                    edit_answer.setVisibility(View.VISIBLE);
+                    btn_ready.setVisibility(View.INVISIBLE);
+                    btn_check.setVisibility(View.VISIBLE);
+                    text_number.setText(String.valueOf(number));
+                    number=null;
                 }
             }
         } else {
@@ -386,6 +395,9 @@ public class Game2Activity extends AppCompatActivity {
         savedInstanceState.putBoolean("Play", btn_ready.getVisibility()==View.VISIBLE);
         savedInstanceState.putInt("Level", cant);
         savedInstanceState.putString("Number", text_number.getText().toString());
+        //Con esto mandamos si el botón de responder está visible
+        Log.i("Hugo", String.valueOf(edit_answer.getVisibility()==View.VISIBLE));
+        savedInstanceState.putBoolean("Visible", edit_answer.getVisibility()==View.VISIBLE);
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
