@@ -372,4 +372,5 @@ private void download() {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
+
 }

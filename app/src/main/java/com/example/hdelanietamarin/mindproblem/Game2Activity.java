@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
@@ -12,7 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,7 +33,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
-public class Game2Activity extends AppCompatActivity {
+public class Game2Activity extends AppCompatActivity implements DialogInterface.OnDismissListener,DialogInterface.OnShowListener{
     TextView text_number, text_level; EditText edit_answer;
     int cant;
     Button btn_ready;  Button btn_check;
@@ -165,7 +168,8 @@ public class Game2Activity extends AppCompatActivity {
                 }
             });
 
-
+            alertDialog.setOnShowListener(this);
+            alertDialog.setOnDismissListener(this);
             alertDialog.show();
 
 
@@ -281,7 +285,8 @@ public class Game2Activity extends AppCompatActivity {
                         alertDialog.dismiss();
                     }
                 });
-
+                alertDialog.setOnShowListener(this);
+                alertDialog.setOnDismissListener(this);
                 alertDialog.show();
 
 
@@ -322,11 +327,33 @@ public class Game2Activity extends AppCompatActivity {
 
 
                 newDialog.setMessage(getString(R.string.action_question));
+                newDialog.setOnShowListener(this);
+                newDialog.setOnDismissListener(this);
                 newDialog.show();
 
             }
         } else{
-            Toast.makeText(this, R.string.insert_valid, Toast.LENGTH_LONG).show();
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+            alertDialog.setTitle(getString(R.string.insert_valid));
+
+            alertDialog.setCancelable(false);
+            LayoutInflater factory = LayoutInflater.from(v.getContext());
+            final View view_ = factory.inflate(R.layout.login_dialog, null);
+            alertDialog.setView(view_);
+
+            Button button2 = view_.findViewById(R.id.button3);
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alertDialog.dismiss();
+                }
+            });
+            alertDialog.setOnShowListener(this);
+            alertDialog.setOnDismissListener(this);
+            alertDialog.show();
+
+
         }
     }
 
@@ -400,5 +427,27 @@ public class Game2Activity extends AppCompatActivity {
         savedInstanceState.putBoolean("Visible", edit_answer.getVisibility()==View.VISIBLE);
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
+    }
+    @Override
+    public void onShow(DialogInterface dialog) {
+        final int screenOrientation = ((WindowManager) getBaseContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
+        switch (screenOrientation){
+            case Surface.ROTATION_180:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                break;
+            case Surface.ROTATION_270:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                break;
+            case Surface.ROTATION_0:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            case Surface.ROTATION_90:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                break;
+        }
+    }
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
     }
 }

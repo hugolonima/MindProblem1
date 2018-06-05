@@ -4,13 +4,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,12 +30,13 @@ import java.io.IOException;
 
 import javax.xml.datatype.Duration;
 
-public class Game1Activity extends AppCompatActivity {
+public class Game1Activity extends AppCompatActivity implements DialogInterface.OnDismissListener,DialogInterface.OnShowListener {
     Button btn_pink; Button btn_red;Button btn_blue;Button btn_green; Button btn_start;
     int actual;
     private static final String  FILENAME_CODE = "user.txt";
     TextView text_level;
 
+    //TODO: AVERIGUAR PORQUÉ TRAS EL GIRO LOS QUE QUEDEN POR MOSTRAR NO SE GUARDAN BIEN
 
     int nivel;
     int secuencia[];
@@ -40,9 +44,11 @@ public class Game1Activity extends AppCompatActivity {
     int index =0;
     int index_answ=0;
     int cont =0;
+    int index_prev =-1;
     String code;
     boolean ended=false;
     FirebaseDatabase database;
+    boolean visible = false;
 
 
     Handler timerHandler = new Handler();
@@ -50,9 +56,18 @@ public class Game1Activity extends AppCompatActivity {
 
         @Override
         public void run() {
-
+            if(index==index_prev){
+                index++;
+            }
             jugar();
+            if(index==index_prev){
+                index++;
+            }
             timerHandler.postDelayed(this, 1000);
+            if(index==index_prev){
+                index++;
+            }
+
         }
     };
 
@@ -87,9 +102,23 @@ public class Game1Activity extends AppCompatActivity {
             index= savedInstanceState.getInt("Index");
             cont=savedInstanceState.getInt("Cont");
             index_answ=savedInstanceState.getInt("Index_answer");
+            visible = savedInstanceState.getBoolean("Visible");
+            index_prev = savedInstanceState.getInt("Index_prev");
 
-            comenzar();
-            timerHandler.postDelayed(timerRunnable, 0);
+
+            //Log.i("Hugo","Cont: " + String.valueOf(cont));
+           // Log.i("Hugo","Index " +index);
+           /* if(secuencia!=null) {
+                for (int i = 0; i < secuencia.length; i++) {
+                    Log.i("Hugo", "Secuencia en " + i + " " + secuencia[i]);
+                }
+
+            }*/
+            if(!visible) {
+                comenzar();
+                timerHandler.postDelayed(timerRunnable, 0);
+
+            }
 
         } else {
 
@@ -143,8 +172,10 @@ public class Game1Activity extends AppCompatActivity {
             });
 
 
-            alertDialog.setTitle(getString(R.string.start_question));
 
+            alertDialog.setTitle(getString(R.string.start_question));
+            alertDialog.setOnShowListener(this);
+            alertDialog.setOnDismissListener(this);
             alertDialog.show();
             // Probably initialize members with default values for a new instance
         }
@@ -175,6 +206,9 @@ public class Game1Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 timerHandler.postDelayed(timerRunnable, 0);
+                if(index==index_prev){
+                    index++;
+                }
                 comenzar();
             }
         });
@@ -216,6 +250,7 @@ public class Game1Activity extends AppCompatActivity {
         btn_red.setEnabled(false);
         int rand =0;
        if(cont<secuencia.length){
+
            do {
                rand = (int) Math.floor(Math.random() * 100);
            } while(actual==getActual(rand));
@@ -226,6 +261,17 @@ public class Game1Activity extends AppCompatActivity {
            btn_pink.setEnabled(true);
            btn_green.setEnabled(true);
            btn_red.setEnabled(true);
+
+           /*if(secuencia!=null) {
+               for (int i = 0; i < secuencia.length; i++) {
+                   //Log.i("Hugo", "Secuencia en " + i + " " + secuencia[i]);
+               }
+
+           }*/
+
+          /* for(int i =0; i<secuencia.length;i++){
+               Log.i("Hugo", "Secuencia guardada en " +i + " " + secuencia[i]);
+           }*/
        }
 
         if(cont==secuencia.length){
@@ -237,12 +283,14 @@ public class Game1Activity extends AppCompatActivity {
     }
 
     private void pintarRespuesta(int bot){
+        //Log.i("Hugo","Indice respuesta: " + index_answ);
         if(bot!=secuencia[index_answ]){
 
             final AlertDialog newDialog = new AlertDialog.Builder(this).create();
             LayoutInflater factory = LayoutInflater.from(this);
             final View view_ = factory.inflate(R.layout.dialog_wrong, null);
             newDialog.setView(view_);
+            newDialog.setCancelable(false);
 
             Button button = view_.findViewById(R.id.button2);
             Button button2 = view_.findViewById(R.id.button3);
@@ -274,6 +322,8 @@ public class Game1Activity extends AppCompatActivity {
 
 
             newDialog.setMessage(getString(R.string.action_question));
+            newDialog.setOnShowListener(this);
+            newDialog.setOnDismissListener(this);
             newDialog.show();
 
 
@@ -337,7 +387,8 @@ public class Game1Activity extends AppCompatActivity {
                         alertDialog.dismiss();
                     }
                 });
-
+                alertDialog.setOnShowListener(this);
+                alertDialog.setOnDismissListener(this);
                 alertDialog.show();
 
 
@@ -365,9 +416,14 @@ public class Game1Activity extends AppCompatActivity {
 
             if(!ended) {
                 actual = 1;
-
+                /*if(index==index_prev){
+                    index++;
+                }*/
                 secuencia[index] = actual;
+              //  index_prev=index;
+               // Log.i("Hugo", String.valueOf(index));
                 index++;
+                //Log.i("Hugo", String.valueOf(index));
             }
 
 
@@ -380,9 +436,14 @@ public class Game1Activity extends AppCompatActivity {
 
             if(!ended) {
                 actual = 2;
-
+                /*if(index==index_prev){
+                    index++;
+                }*/
                 secuencia[index] = actual;
+                //index_prev=index;
+                //Log.i("Hugo", String.valueOf(index));
                 index++;
+                //Log.i("Hugo", String.valueOf(index));
             }
 
         }else if(rand<=75){
@@ -393,9 +454,14 @@ public class Game1Activity extends AppCompatActivity {
 
             if(!ended) {
                 actual = 3;
-
+                /*if(index==index_prev){
+                    index++;
+                }*/
                 secuencia[index] = actual;
+               // index_prev=index;
+               // Log.i("Hugo", String.valueOf(index));
                 index++;
+                //Log.i("Hugo", String.valueOf(index));
             }
 
         }else{
@@ -407,8 +473,14 @@ public class Game1Activity extends AppCompatActivity {
             if(!ended) {
                 actual = 4;
 
+               /* if(index==index_prev){
+                    index++;
+                }*/
                 secuencia[index] = actual;
+                //index_prev=index;
+                //Log.i("Hugo", String.valueOf(index));
                 index++;
+               // Log.i("Hugo", String.valueOf(index));
             }
 
         }
@@ -465,10 +537,53 @@ public class Game1Activity extends AppCompatActivity {
         savedInstanceState.putInt("Index", index);
         savedInstanceState.putInt("Cont", cont);
         savedInstanceState.putInt("Index_answer", index_answ);
+        savedInstanceState.putInt("Index_prev", index_prev);
+        savedInstanceState.putBoolean("Visible", btn_start.getVisibility()==View.VISIBLE);
+
+        /*try{
+            timerRunnable.wait();
+        } catch (Exception e){
+
+        }*/
 
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
 
+    @Override
+    public void onShow(DialogInterface dialog) {
+        final int screenOrientation = ((WindowManager) getBaseContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
+        switch (screenOrientation){
+            case Surface.ROTATION_180:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                break;
+            case Surface.ROTATION_270:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                break;
+            case Surface.ROTATION_0:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            case Surface.ROTATION_90:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                break;
+        }
+    }
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+    }
+
+
+
+    public int findCero(int[] secuencia){
+        int c = 0;
+        for(int i=0; i<secuencia.length; i++){
+            if(secuencia[i]==0){
+                c =i;
+                i = secuencia.length;
+            }
+        }
+        return c;
+    }
 }
